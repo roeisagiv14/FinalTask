@@ -1,0 +1,75 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'idea'
+    //id 'checkstyle'
+    id "io.freefair.lombok" version "5.1.0"
+    id "io.spring.dependency-management" version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.6.2' apply false
+    id 'com.jfrog.artifactory' version "$jFrogArtifactoryVersion" apply false
+    id 'org.openapi.generator' version "$openApiGeneratorVersion" apply false
+}
+
+allprojects {
+    generateLombokConfig.enabled = false
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://packages.confluent.io/maven/'
+    }
+    maven {
+        url = uri("https://jitpack.io")
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    //apply plugin: 'checkstyle'
+    apply plugin: 'idea'
+    apply plugin: 'io.freefair.lombok'
+
+    apply plugin: 'io.spring.dependency-management'
+
+    group 'com.academy.finaltask'
+    version '1.0.0-SNAPSHOT'
+
+    ext {
+        checkstyleVersion = '8.27'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+            mavenBom "org.testcontainers:testcontainers-bom:${testContainersVersion}"
+        }
+    }
+
+    repositories {
+        mavenCentral()
+
+        /*maven {
+            url "${artifactoryJavavirtUrl}"
+            credentials {
+                username = System.getenv("JFROG_USER")
+                password = System.getenv("JFROG_PASSWORD")
+            }
+        }*/
+        maven {
+            url 'https://packages.confluent.io/maven/'
+        }
+        maven {
+            url = uri("https://jitpack.io")
+        }
+
+    }
+
+    generateLombokConfig.enabled = false
+}
+  dependencies {
+      testImplementation('org.springframework.boot:spring-boot-starter-test') {
+          exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+      }
+  }

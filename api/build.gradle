@@ -1,0 +1,37 @@
+plugins {
+
+    //id 'com.jfrog.artifactory'
+    id 'org.openapi.generator'
+}
+apply plugin: 'org.springframework.boot'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    /*
+    maven {
+        url "${artifactoryJavavirtUrl}"
+        credentials{
+            username = System.getenv("JFROG_USER")
+            password = System.getenv("JFROG_PASSWORD")
+        }
+    }
+     */
+}
+
+dependencies {
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation "javax.persistence:javax.persistence-api"
+
+    implementation project(":core")
+}

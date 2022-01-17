@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+    //needed to be add in order to enable import javax.persistence.* in this module until i added the dependency management at build.gradle of finaltask
+    //id 'io.spring.dependency-management'
+   // id 'org.springframework.boot'
+}
+
+version '1.0-SNAPSHOT'
+
+
+dependencies {
+    // Database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+}
+
