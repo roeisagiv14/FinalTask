@@ -25,7 +25,7 @@ public class TaskConverter {
         return new JSONObject()
                 .put("Id:", task.getId())
                 .put("Title:", task.getTitleOfTask())
-                .put("Assignee:", task.getAssigneeOfTask().toString())
+                .put("Assignee:", employeeConverter.employeeToJSONObj(task))
                 .put("Due date:", task.getDueDateOfTask().toString())
                 .put("Status", task.getStatusOfTask().toString()).toString();
     }
