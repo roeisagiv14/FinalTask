@@ -29,7 +29,8 @@ public class Task {
     private Employee assigneeOfTask;
     @Column(name = "dueDateOfTask")
     private Date dueDateOfTask;
-    @Column(name = "statusOfTask")
+    //@Column(name = "statusOfTask")
+    @Enumerated(EnumType.ORDINAL)
     private Status statusOfTask;
 
     public Task() {

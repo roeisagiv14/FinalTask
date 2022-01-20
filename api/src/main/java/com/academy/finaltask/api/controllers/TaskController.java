@@ -11,10 +11,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,6 +38,13 @@ public class TaskController {
         Task newTask = taskService.create(taskConverter.taskFromRequest(stringRequestEntity));
         return ResponseEntity.status(HttpStatus.FOUND).body(taskConverter.toTaskResponse(newTask).toString());
     }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long id){
+        taskService.deleteById(id);
+       return ResponseEntity.ok().body("Task with id:" + id + " deleted");
+    }
+
 
 
 }
