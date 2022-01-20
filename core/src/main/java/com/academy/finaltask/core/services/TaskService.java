@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -17,6 +18,10 @@ public class TaskService {
     private TaskRepository taskRepository;
     @Autowired
     private EmployeeService employeeService;
+
+    public ArrayList<Task> findall(){
+     return (ArrayList<Task>) taskRepository.findAll();
+    };
 
     public Task create(Task task) {
 

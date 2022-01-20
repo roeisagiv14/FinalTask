@@ -14,5 +14,6 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
     boolean existsByFirstNameOfEmployeeAndLastNameOfEmployee(String firstNameOfEmployee, String lastNameOfEmployee);
 
     Employee findByFirstNameOfEmployeeAndLastNameOfEmployee(String firstNameOfEmployee, String lastNameOfEmployee);
+
     //Set<Task> findAllBy(Employee employeeName);
 }
