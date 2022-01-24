@@ -33,6 +33,12 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(taskConverter.toTasksResponse(tasks).toString());
     }
 
+    @GetMapping(path = "/task/{id}")
+    public ResponseEntity<String> getTask(@PathVariable Long id) throws JSONException {
+        Task task = taskService.findTaskById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(taskConverter.toTaskResponse(task).toString());
+    }
+
     @PostMapping(path = "/add")
     public ResponseEntity<String> addNewTask(RequestEntity<String> stringRequestEntity) throws JSONException, ParseException {
         Task newTask = taskService.create(taskConverter.taskFromRequest(stringRequestEntity));
@@ -44,6 +50,13 @@ public class TaskController {
         taskService.deleteById(id);
        return ResponseEntity.ok().body("Task with id:" + id + " deleted");
     }
+
+    @PutMapping(path = "/edit/{id}")
+    public ResponseEntity<String> editTask(@PathVariable Long id, RequestEntity<String> stringRequestEntity) throws JSONException, ParseException {
+        taskService.create((taskConverter.taskFromRequestById(stringRequestEntity, id)));
+        return ResponseEntity.ok().body("Task with id:" + id + " updated");
+    }
+
 
 
 

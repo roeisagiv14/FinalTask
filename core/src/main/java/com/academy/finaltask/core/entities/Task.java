@@ -36,7 +36,8 @@ public class Task {
     public Task() {
     }
 
-    public Task(String titleOfTask, Employee assigneeOfTask, Date dueDateOfTask, Status statusOfTask) {
+    public Task(Long id, String titleOfTask, Employee assigneeOfTask, Date dueDateOfTask, Status statusOfTask) {
+        this.id = id;
         this.titleOfTask = titleOfTask;
         this.assigneeOfTask = assigneeOfTask;
         this.dueDateOfTask = dueDateOfTask;

@@ -15,5 +15,5 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
     Employee findByFirstNameOfEmployeeAndLastNameOfEmployee(String firstNameOfEmployee, String lastNameOfEmployee);
 
-    //Set<Task> findAllBy(Employee employeeName);
+
 }

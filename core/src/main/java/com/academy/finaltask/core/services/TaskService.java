@@ -23,10 +23,9 @@ public class TaskService {
      return (ArrayList<Task>) taskRepository.findAll();
     };
 
-    public Task create(Task task) {
+    public Task create(Task task) {return save(task);}
 
-        return save(task);
-    }
+    public Task findTaskById(Long id){ return taskRepository.findTasksById(id);}
 
     public void deleteById(Long id){
         taskRepository.deleteById(id);
@@ -50,4 +49,5 @@ public class TaskService {
 
         return  savedTask;
     }
+
 }

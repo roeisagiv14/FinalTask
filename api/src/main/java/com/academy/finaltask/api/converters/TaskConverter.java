@@ -25,6 +25,10 @@ public class TaskConverter {
         return taskBuilderFromJSONObj(new JSONObject(stringRequestEntity.getBody()));
     }
 
+    public Task taskFromRequestById(RequestEntity<String> stringRequestEntity, Long id) throws JSONException, ParseException {
+        return  taskBuilderFromJSONObjById(new JSONObject(stringRequestEntity.getBody()), id);
+    }
+
     public JSONObject toTaskResponse(Task task) throws JSONException {
         return new JSONObject()
                 .put("Id:", task.getId())
@@ -41,6 +45,15 @@ public class TaskConverter {
         }
          return allTasks;
     }
+
+    private Task taskBuilderFromJSONObjById(JSONObject JSONObjFromStringRequestEntity, Long id) throws JSONException, ParseException {
+        return new Task(id,
+                JSONObjFromStringRequestEntity.getString("titleOfTask"),
+                employeeConverter.employeeFromJSONObj((JSONObject) JSONObjFromStringRequestEntity.get("assigneeOfTask")),
+                new SimpleDateFormat("ddMMyyyy").parse(JSONObjFromStringRequestEntity.getString("dueDateOfTask")),
+                getStatusFromString(JSONObjFromStringRequestEntity.getString("statusOfTask")));
+    }
+
 
     private Task taskBuilderFromJSONObj(JSONObject JSONObjFromStringRequestEntity) throws JSONException, ParseException {
         return Task.builder()
