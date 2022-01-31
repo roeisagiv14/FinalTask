@@ -1,0 +1,36 @@
+task:
+  post:
+    summary: Post a task
+    operationId: addNewTask
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: 'tasksComponents.yaml#/TaskRequest'
+    responses:
+      200:
+        description: Created new Task
+        content:
+          application/json:
+            schema:
+              $ref: 'tasksComponents.yaml#/TaskResponse'
+      400:
+        description: Bad request
+
+tasks:
+  get:
+    summary: Get all tasks
+    operationId: getAllTasks
+    responses:
+      200:
+        description: All the existing tasks
+        content:
+          application/json:
+            schema:
+              $ref: 'tasksComponents.yaml#/TasksResponse'
+      204:
+        description: List of tasks is empty
+      404:
+        description: Not found
+

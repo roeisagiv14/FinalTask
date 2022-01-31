@@ -1,12 +1,15 @@
 package com.academy.finaltask.core.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static javax.persistence.CascadeType.PERSIST;
@@ -28,7 +31,9 @@ public class Task {
     @JoinColumn(name = "employee_id")
     private Employee assigneeOfTask;
     @Column(name = "dueDateOfTask")
-    private Date dueDateOfTask;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "YYYY-MM-dd")
+    private LocalDate dueDateOfTask;
     //@Column(name = "statusOfTask")
     @Enumerated(EnumType.ORDINAL)
     private Status statusOfTask;
@@ -36,7 +41,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id, String titleOfTask, Employee assigneeOfTask, Date dueDateOfTask, Status statusOfTask) {
+    public Task(Long id, String titleOfTask, Employee assigneeOfTask, LocalDate dueDateOfTask, Status statusOfTask) {
         this.id = id;
         this.titleOfTask = titleOfTask;
         this.assigneeOfTask = assigneeOfTask;
@@ -68,11 +73,11 @@ public class Task {
         this.assigneeOfTask = assigneeOfTask;
     }
 
-    public Date getDueDateOfTask() {
+    public LocalDate getDueDateOfTask() {
         return dueDateOfTask;
     }
 
-    public void setDueDateOfTask(Date dueDateOfTask) {
+    public void setDueDateOfTask(LocalDate dueDateOfTask) {
         this.dueDateOfTask = dueDateOfTask;
     }
 

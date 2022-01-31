@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=Tasks
+      - MYSQL_USER=roei
+      - MYSQL_PASSWORD=pass
+
+    networks:
+      - java-backend-network
+
+  api:
+    container_name: api
+    image: rasiv/task_api:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JARFILE=./api/build/libs/api-1.0.0-SNAPSHOT.jar
+    ports:
+      - 8080:8080
+    networks:
+      - java-backend-network
+    depends_on:
+      - mysql
+
+networks:
+  java-backend-network:
+    driver: bridge

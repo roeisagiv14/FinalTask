@@ -1,9 +1,13 @@
 package com.academy.finaltask.api.converters;
 
+import com.academy.finaltask.api.generated.model.EmployeeRequest;
+import com.academy.finaltask.api.generated.model.EmployeeRequestEmployee;
+import com.academy.finaltask.api.generated.model.EmployeeResponse;
+import com.academy.finaltask.api.generated.model.EmployeeResponseEmployee;
 import com.academy.finaltask.core.entities.Employee;
 import com.academy.finaltask.core.entities.Task;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONObject;
+import org.json.JSONException;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +16,17 @@ import java.text.ParseException;
 @Component
 public class EmployeeConverter {
 
-    public Employee employeeFromRequest(RequestEntity<String> stringRequestEntity) throws JSONException {
-        return employeeFromJSONObj(new JSONObject(stringRequestEntity.getBody()));
+
+//    public Employee employeeFromRequest(RequestEntity<String> stringRequestEntity) throws JSONException {
+//        return employeeFromJSONObj(new JSONObject(stringRequestEntity.getBody()));
+//    }
+
+    public Employee employeeFromRequest(EmployeeRequest employeeRequest){
+        EmployeeRequestEmployee employee = employeeRequest.getEmployee();
+        return Employee.builder()
+                .firstNameOfEmployee(employee.getFirstName())
+                .lastNameOfEmployee(employee.getLastName())
+                .build();
     }
 
     public  Employee employeeFromJSONObj(JSONObject JSONObjFromStringRequestEntity) throws JSONException{
@@ -23,16 +36,15 @@ public class EmployeeConverter {
                 .build();
     }
 
-    public String toEmployeeResponse(Employee employee) throws JSONException {
-        try{
-            return new JSONObject()
-                    .put("Id:", employee.getId())
-                    .put("First Name:", employee.getFirstNameOfEmployee())
-                    .put("Last Name:", employee.getLastNameOfEmployee())
-                    .toString();
-        }catch (JSONException e) {
-                return "Error parsing employee JSON";
-        }
+    public EmployeeResponse toEmployeeResponse(Employee employee) {
+        EmployeeResponseEmployee employeeResponseEmployee = new EmployeeResponseEmployee();
+        employeeResponseEmployee.setId(employee.getId());
+        employeeResponseEmployee.setFirstName(employee.getFirstNameOfEmployee());
+        employeeResponseEmployee.setLastName(employee.getLastNameOfEmployee());
+        EmployeeResponse employeeResponse = new EmployeeResponse();
+        employeeResponse.setEmployee(employeeResponseEmployee);
+
+        return employeeResponse;
     }
 
     public JSONObject employeeToJSONObj(Task task){

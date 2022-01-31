@@ -5,6 +5,28 @@ plugins {
 }
 apply plugin: 'org.springframework.boot'
 
+group = 'com.academy.finaltask'
+
+ext {
+    sourceCompatibility = '11'
+
+    description = 'Yotpo academy project'
+    group = 'com.academy.finaltask'
+    version = '0.0.1-SNAPSHOT'
+
+    generateServerLocation = "$buildDir/generated/server"
+    generateAngularClientLocation = "$buildDir/generated/angular-client"
+    generateJavaClientLocation = "$buildDir/generated/java-client"
+
+    clientArtifactId = 'java-micro-demo-client'
+    clientGroupId = "com.yotpo.demo.client"
+    artifactoryContextUrl = 'https://yotpo.jfrog.io/yotpo'
+    artifactoryJavaLocalRepoKey = 'java-local'
+    clientVersion = '1.0.0-' + ((System.env['TRAVIS_BRANCH'] == null || System.env['TRAVIS_BRANCH'] == 'master') ? 'RELEASE' : System.env['TRAVIS_BRANCH'])
+    artifactFileName = "${clientArtifactId}-${clientVersion}.jar"
+    artifactPath = "${generateJavaClientLocation}/build/libs/${artifactFileName}"
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -24,6 +46,48 @@ repositories {
      */
 }
 
+
+
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$projectDir/openApi/service.yaml"
+    outputDir = "$generateServerLocation"
+    apiPackage = "${group}.api.generated"
+    invokerPackage = "${group}.api.generated.invoker"
+    modelPackage = "${group}.api.generated.model"
+//    modelNameSuffix = "Dto"
+
+    // config options "documentation": https://openapi-generator.tech/docs/generators/spring
+    configOptions = [
+            dateLibrary            : "java8-localdatetime",
+            hideGenerationTimestamp: "true",
+            interfaceOnly          : "true",
+            unhandledException     : "true",
+            useTags                : "true"
+    ]
+}
+
+task generateFullSchemaFile(type: Exec) {
+    commandLine "$rootDir/scripts/combine_openapi_files.sh", "$rootDir"
+}
+compileJava.dependsOn tasks.generateFullSchemaFile
+
+compileJava.dependsOn tasks.openApiGenerate
+
+task cleanAutoGenerateFiles(type: Delete) {
+    delete "$generateServerLocation"
+}
+tasks.openApiGenerate.dependsOn tasks.cleanAutoGenerateFiles
+
+sourceSets {
+    main {
+        java {
+            srcDirs "$generateServerLocation/src/main/java/"
+        }
+    }
+}
+
 dependencies {
     // Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -32,6 +96,11 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     implementation "javax.persistence:javax.persistence-api"
+    implementation 'org.json:json:20090211'
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    //implementation 'org.springframework:spring-jdbc:3.2.1.RELEASE'
+
 
     implementation project(":core")
 }
