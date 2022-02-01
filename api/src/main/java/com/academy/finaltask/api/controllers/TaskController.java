@@ -20,8 +20,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Set;
 
-//@RestController
-//@RequestMapping(path ="/tasks")
 @Controller
 public class TaskController implements DefaultApi {
 

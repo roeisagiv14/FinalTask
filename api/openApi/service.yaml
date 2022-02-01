@@ -18,7 +18,9 @@ security:
   - bearer: []
 
 paths:
-  /tasks/all:
+  /tasks:
     $ref: 'tasksRequests.yaml#/tasks'
-  /tasks/add:
+#  /tasks/add:
+#    $ref: 'tasksRequests.yaml#/task'
+  /tasks/{task_id}:
     $ref: 'tasksRequests.yaml#/task'

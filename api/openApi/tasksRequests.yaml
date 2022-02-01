@@ -1,4 +1,62 @@
 task:
+  put:
+    summary: Updating existing task
+    operationId: updateTask
+    parameters:
+      - in: path
+        name: task_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: The task id
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: 'tasksComponents.yaml#/TaskRequest'
+    responses:
+      200:
+        description: The updated task
+        content:
+          application/json:
+            schema:
+              $ref: 'tasksComponents.yaml#/TaskResponse'
+      404:
+        description: Not found
+  delete:
+    summary: Delete task by id
+    operationId: deleteTask
+    parameters:
+      - in: path
+        name: task_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: The task id
+    responses:
+      200:
+        description: The task was deleted
+      404:
+        description: Not found
+
+tasks:
+  get:
+    summary: Get all tasks
+    operationId: getAllTasks
+    responses:
+      200:
+        description: All the existing tasks
+        content:
+          application/json:
+            schema:
+              $ref: 'tasksComponents.yaml#/TasksResponse'
+      204:
+        description: List of tasks is empty
+      404:
+        description: Not found
   post:
     summary: Post a task
     operationId: addNewTask
@@ -17,20 +75,3 @@ task:
               $ref: 'tasksComponents.yaml#/TaskResponse'
       400:
         description: Bad request
-
-tasks:
-  get:
-    summary: Get all tasks
-    operationId: getAllTasks
-    responses:
-      200:
-        description: All the existing tasks
-        content:
-          application/json:
-            schema:
-              $ref: 'tasksComponents.yaml#/TasksResponse'
-      204:
-        description: List of tasks is empty
-      404:
-        description: Not found
-
