@@ -42,33 +42,21 @@ public class TaskController implements DefaultApi {
         return ResponseEntity.status(HttpStatus.FOUND).body(tasksResponse);
     }
 
+    @Override
+    public ResponseEntity<Void> deleteTask(Long id){
+        taskService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<TaskResponse> updateTask(Long id, TaskRequest taskRequest){
+        Task task = taskService.create((taskConverter.taskFromRequestById(taskRequest, id)));
+        TaskResponse taskResponseFromTask = taskConverter.toTaskResponse(task);
+        return ResponseEntity.ok().body(taskResponseFromTask);
+    }
+
 
 /*
-    @GetMapping(path = "/all")
-    public ResponseEntity<String> getAllTasks() throws  org.json.JSONException {
-        ArrayList<Task> tasks = taskService.findall();
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(taskConverter.toTasksResponse(tasks).toString());
-    }
-
-
-
-    @GetMapping(path = "/task/{id}")
-    public ResponseEntity<String> getTask(@PathVariable Long id) throws org.json.JSONException {
-        Task task = taskService.findTaskById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(taskConverter.toTaskResponse(task).toString());
-    }
-
-    @PostMapping(path = "/add")
-    public ResponseEntity<String> addNewTask(RequestEntity<String> stringRequestEntity) throws ParseException, org.json.JSONException {
-        Task newTask = taskService.create(taskConverter.taskFromRequest(stringRequestEntity));
-        return ResponseEntity.status(HttpStatus.FOUND).body(taskConverter.toTaskResponse(newTask).toString());
-    }
-
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable Long id){
-        taskService.deleteById(id);
-       return ResponseEntity.ok().body("Task with id:" + id + " deleted");
-    }
 
     @PutMapping(path = "/edit/{id}")
     public ResponseEntity<String> editTask(@PathVariable Long id, RequestEntity<String> stringRequestEntity) throws ParseException, org.json.JSONException {

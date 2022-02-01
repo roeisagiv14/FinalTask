@@ -59,6 +59,15 @@ public class TaskConverter {
         return allTasks;
     }
 
+    public Task taskFromRequestById(TaskRequest taskRequest, Long id){
+        Task updatedTask = taskFromRequest(taskRequest);
+        return new Task(id,
+                updatedTask.getTitleOfTask(),
+                updatedTask.getAssigneeOfTask(),
+                updatedTask.getDueDateOfTask(),
+                updatedTask.getStatusOfTask());
+    }
+
 
 
 

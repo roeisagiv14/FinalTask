@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -48,6 +49,25 @@ public class TaskService {
         }
 
         return  savedTask;
+    }
+
+    public Task update(Task task) throws EntityNotFoundException {
+        Long id = task.getId();
+
+        Optional<Task> optionalExistingTask = Optional.ofNullable(findTaskById(id));
+        if (optionalExistingTask.isEmpty()) {
+            String errorMsg = "Unable to update task, task not found";
+            throw new EntityNotFoundException(errorMsg);
+        }
+
+        Task existingTask = optionalExistingTask.get();
+        existingTask.setTitleOfTask(task.getTitleOfTask());
+        existingTask.setAssigneeOfTask(task.getAssigneeOfTask());
+        existingTask.setDueDateOfTask(task.getDueDateOfTask());
+        existingTask.setStatusOfTask(task.getStatusOfTask());
+
+        Task updatedTask = taskRepository.save(existingTask);
+        return updatedTask;
     }
 
 }
