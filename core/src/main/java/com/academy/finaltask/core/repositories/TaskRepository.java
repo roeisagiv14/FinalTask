@@ -11,4 +11,5 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
     Task findTasksById(Long id);
 
+    boolean existsByTitleOfTask(String title);
 }

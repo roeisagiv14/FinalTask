@@ -1,6 +1,5 @@
 package com.academy.finaltask.api.controllers;
 
-
 import com.academy.finaltask.api.converters.TaskConverter;
 import com.academy.finaltask.api.generated.DefaultApi;
 import com.academy.finaltask.api.generated.model.TaskRequest;
@@ -50,6 +49,7 @@ public class TaskController implements DefaultApi {
 
     @Override
     public ResponseEntity<TaskResponse> updateTask(Long id, TaskRequest taskRequest){
+        taskService.throwIfTaskNotExists(id);
         Task task = taskService.create((taskConverter.taskFromRequestById(taskRequest, id)));
         TaskResponse taskResponseFromTask = taskConverter.toTaskResponse(task);
         return ResponseEntity.ok().body(taskResponseFromTask);

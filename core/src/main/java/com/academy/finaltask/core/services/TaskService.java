@@ -24,11 +24,15 @@ public class TaskService {
      return (ArrayList<Task>) taskRepository.findAll();
     };
 
-    public Task create(Task task) {return save(task);}
+    public Task create(Task task) {
+        throwIfTaskAlreadyExists(task);
+        return save(task);
+    }
 
     public Task findTaskById(Long id){ return taskRepository.findTasksById(id);}
 
     public void deleteById(Long id){
+        throwIfTaskNotExists(id);
         taskRepository.deleteById(id);
     }
 
@@ -51,23 +55,31 @@ public class TaskService {
         return  savedTask;
     }
 
-    public Task update(Task task) throws EntityNotFoundException {
-        Long id = task.getId();
-
-        Optional<Task> optionalExistingTask = Optional.ofNullable(findTaskById(id));
-        if (optionalExistingTask.isEmpty()) {
-            String errorMsg = "Unable to update task, task not found";
-            throw new EntityNotFoundException(errorMsg);
+    private void throwIfTaskAlreadyExists(Task task){
+        boolean isTaskExists = taskRepository.existsByTitleOfTask(task.getTitleOfTask());
+        if(!isTaskExists){
+            return;
         }
 
-        Task existingTask = optionalExistingTask.get();
-        existingTask.setTitleOfTask(task.getTitleOfTask());
-        existingTask.setAssigneeOfTask(task.getAssigneeOfTask());
-        existingTask.setDueDateOfTask(task.getDueDateOfTask());
-        existingTask.setStatusOfTask(task.getStatusOfTask());
+        throw new EntityExistsException("Task with the title: " + "'" +task.getTitleOfTask() + "'" + " already exists");
+    }
 
-        Task updatedTask = taskRepository.save(existingTask);
-        return updatedTask;
+//    private void throwIfRequestNotGood(Task task){
+//        boolean isTaskExists = taskRepository.existsByTitleOfTask(task.getTitleOfTask());
+//        if(!isTaskExists){
+//            return;
+//        }
+//
+//        throw new EntityExistsException("Task with the title: " + "'" +task.getTitleOfTask() + "'" + " already exists");
+//    }
+
+    public void throwIfTaskNotExists(Long id){
+        boolean isTaskExists = taskRepository.existsById(id);
+        if(isTaskExists){
+            return;
+        }
+
+        throw new EntityNotFoundException("Task with the id: " + "'" + id + "'" + " not found");
     }
 
 }
